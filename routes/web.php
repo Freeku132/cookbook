@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrdersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,16 +18,18 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/charts', function (){
-    $thisYearOrders = \App\Models\Order::query()
-        ->whereYear('created_at', date('Y'))
-        ->groupByMonth();
-    $lastYearOrders = \App\Models\Order::query()
-        ->whereYear('created_at', date('Y')-1)
-        ->groupByMonth();
+//Route::get('/charts', function (){
+//    $thisYearOrders = \App\Models\Order::query()
+//        ->whereYear('created_at', date('Y'))
+//        ->groupByMonth();
+//    $lastYearOrders = \App\Models\Order::query()
+//        ->whereYear('created_at', date('Y')-1)
+//        ->groupByMonth();
+//
+//    return view('charts', [
+//        'thisYearOrders' => $thisYearOrders,
+//        'lastYearOrders' => $lastYearOrders
+//            ]);
+//});
 
-    return view('charts', [
-        'thisYearOrders' => $thisYearOrders,
-        'lastYearOrders' => $lastYearOrders
-            ]);
-});
+Route::get('/charts', [OrdersController::class, 'index']);
