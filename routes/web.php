@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\StatsController;
+
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +36,6 @@ Route::get('/', function () {
 //});
 
 Route::get('/charts', [OrdersController::class, 'index']);
+
+Route::get('/stats', [StatsController::class, 'index']);
+
