@@ -35,7 +35,7 @@ Route::get('/', function () {
 //            ]);
 //});
 
-Route::get('/charts', [OrdersController::class, 'index']);
+Route::get('/charts', [OrdersController::class, 'index'])->name('charts');
 
-Route::get('/stats', [StatsController::class, 'index']);
+Route::get('/stats', [StatsController::class, 'index'])->name('stats');
 
