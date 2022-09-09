@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AnnouncementsController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\StatsController;
 
+use App\Models\Announcement;
 use Illuminate\Support\Facades\Route;
 
 
@@ -38,4 +40,10 @@ Route::get('/', function () {
 Route::get('/charts', [OrdersController::class, 'index'])->name('charts');
 
 Route::get('/stats', [StatsController::class, 'index'])->name('stats');
+
+Route::get('/announcement', [AnnouncementsController::class, 'index'])->name('announcement');
+
+Route::get('/announcement/edit', [AnnouncementsController::class, 'edit'])->name('edit-announcement');
+
+Route::patch('/announcement/update', [AnnouncementsController::class, 'update'])->name('update-announcement');
 
