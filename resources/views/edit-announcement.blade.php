@@ -1,12 +1,33 @@
 <x-layout>
+    @push('styles')
+        <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
+
+        <link
+            href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+            rel="stylesheet"
+        />
+
+
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+    @endpush
     @if(session('success_message'))
-        <div class="bg-green-200 text-green-800 px-4 py-2">
+        <div class="bg-green-200 text-green-800 px-4 py-2 rounded-lg">
             {{session('success_message')}}
+        </div>
+    @endif
+    @if(count($errors) > 0)
+        <div class="bg-red-200 text-red-700 px-4 py-2 rounded-lg">
+            <ul class="list-disc ml-4">
+                @foreach($errors->all() as $error)
+                    <li>{{$error}}</li>
+                @endforeach
+            </ul>
         </div>
     @endif
     <div class="bg-white xl:w-1/2 mx-auto rounded-lg shadow-md mt-4 overflow-hidden">
         <h3 class="text-xl m-6 font-semibold"> Edit Announcement</h3>
-        <form action="{{route('update-announcement')}}" method="POST" class="max-w-2xl mt-4" id="updateAnnouncement">
+        <form action="{{route('update-announcement')}}" method="POST" class="max-w-2xl mt-4" id="updateAnnouncement" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
         <div class="my-8 p-6">
@@ -67,6 +88,22 @@
                 <input type="url" name="buttonLink" id="buttonLink" class="border border-gray-400 rounded w-full px-2 py-2 mt-2" value="{{$announcement->buttonLink}}" required>
             </div>
 
+            <div class="mt-4">
+                <label for="imageUpload" class="font-semibold block">Image Upload</label>
+                <input type="file" name="imageUpload" id="imageUpload" class="mt-2" accept="image/*">
+                @if ($announcement->imageUpload)
+                    <img src="{{ asset('/storage/'.$announcement->imageUpload) }}" alt="image" class="mx-auto">
+                @endif
+            </div>
+
+            <div class="mt-4">
+                <label for="imageUploadFilePond" class="font-semibold block">Image Upload FilePond</label>
+                <input type="file" name="imageUploadFilePond" id="imageUploadFilePond" class="mt-2" accept="image/*">
+                @if ($announcement->imageUploadFilePond)
+                    <img src="{{ asset('/storage/'.$announcement->imageUploadFilePond) }}" alt="image" class="mx-auto">
+                @endif
+            </div>
+
             <div class="mt-8">
                 <button type="submit" class="bg-blue-600 rounded inline-block text-white px-4 py-4">Update Announcement</button>
             </div>
@@ -74,8 +111,21 @@
         </form>
     </div>
         @push('scripts')
-            <!-- Include the Quill library -->
+                            <!-- Import -->
             <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+            <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+
+            <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+
+            <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+
+            <script src="https://unpkg.com/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.js"></script>
+
+
+            <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
+
+
 
             <!-- Initialize Quill editor -->
             <script>
@@ -92,5 +142,35 @@
                     form.submit();
                 })
             </script>
+                        {{--Init FilePond--}}
+            <script>
+                //Plugin preview
+                FilePond.registerPlugin(FilePondPluginImagePreview);
+                //Plugin validate
+                FilePond.registerPlugin(FilePondPluginFileValidateType);
+                //Plugin transform
+                FilePond.registerPlugin(FilePondPluginImageTransform);
+                //Plugin resize
+                FilePond.registerPlugin(FilePondPluginImageResize);
+
+
+
+                // Get a reference to the file input element
+                const inputElement = document.querySelector('#imageUploadFilePond');
+
+                // Create a FilePond instance
+                const pond = FilePond.create(inputElement,{
+                    imageResizeTargetWidth: 800,
+                    imageResizeMode: 'contain',
+                    imageResizeUpscale : 'false',
+                    server: {
+                        url: '/upload',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{csrf_token()}}'
+                        }
+                    }
+                });
+            </script>
+
         @endpush
 </x-layout>

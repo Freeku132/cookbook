@@ -5,6 +5,7 @@ use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\StatsController;
 
 use App\Models\Announcement;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
@@ -47,3 +48,10 @@ Route::get('/announcement/edit', [AnnouncementsController::class, 'edit'])->name
 
 Route::patch('/announcement/update', [AnnouncementsController::class, 'update'])->name('update-announcement');
 
+Route::post('/upload', function (Request $request){
+    if ($request->imageUploadFilePond){
+        $path = $request->file('imageUploadFilePond')->store('tmp', 'public');
+    }
+
+    return $path;
+});
