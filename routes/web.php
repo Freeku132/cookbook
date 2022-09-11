@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnnouncementsController;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\PostsController;
 use App\Http\Controllers\StatsController;
 
 use App\Models\Announcement;
@@ -55,3 +56,14 @@ Route::post('/upload', function (Request $request){
 
     return $path;
 });
+
+
+Route::get('/posts', [PostsController::class, 'index'])->name('index-posts');
+Route::get('/post/create',[ PostsController::class, 'create']);
+Route::post('/post/store', [PostsController::class, 'store']);
+Route::get('/post/{post:slug}/edit', [PostsController::class, 'edit'])->name('edit-post');
+Route::patch('/post/{post:slug}/update',[PostsController::class, 'update'])->name('update-post');
+Route::delete('/post/{id}/delete', [PostsController::class, 'destroy']);
+Route::get('/post/{post:slug}', [PostsController::class, 'show'])->name('show-post');
+
+

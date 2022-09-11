@@ -52,6 +52,8 @@
             <a href="{{route('charts')}}" class="hover:text-gray-200">Charts</a>
             <a href="{{route('stats')}}" class="hover:text-gray-200">Stats</a>
             <a href="{{route('edit-announcement')}}" class="hover:text-gray-200">Edit Announcement</a>
+            <a href="{{route('index-posts')}}" class="hover:text-gray-200">Posts</a>
+            <a href="/post/create" class="hover:text-gray-200">Create Post</a>
 
         </nav>
     </div>
