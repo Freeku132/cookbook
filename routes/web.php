@@ -3,6 +3,7 @@
 use App\Http\Controllers\AnnouncementsController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\SongsController;
 use App\Http\Controllers\StatsController;
 
 use App\Models\Announcement;
@@ -65,5 +66,7 @@ Route::get('/post/{post:slug}/edit', [PostsController::class, 'edit'])->name('ed
 Route::patch('/post/{post:slug}/update',[PostsController::class, 'update'])->name('update-post');
 Route::delete('/post/{id}/delete', [PostsController::class, 'destroy']);
 Route::get('/post/{post:slug}', [PostsController::class, 'show'])->name('show-post');
+
+Route::get('/drag-drop', [SongsController::class, 'index'])->name('drag-drop');
 
 

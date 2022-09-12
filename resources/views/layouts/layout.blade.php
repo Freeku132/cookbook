@@ -54,6 +54,7 @@
             <a href="{{route('edit-announcement')}}" class="hover:text-gray-200">Edit Announcement</a>
             <a href="{{route('index-posts')}}" class="hover:text-gray-200">Posts</a>
             <a href="/post/create" class="hover:text-gray-200">Create Post</a>
+            <a href="{{route('drag-drop')}}" class="hover:text-gray-200">Drag and Drop</a>
 
         </nav>
     </div>
