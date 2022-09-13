@@ -8,7 +8,9 @@ use App\Http\Controllers\StatsController;
 
 use App\Models\Announcement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Client\Pool;
 
 
 /*
@@ -68,5 +70,33 @@ Route::delete('/post/{id}/delete', [PostsController::class, 'destroy']);
 Route::get('/post/{post:slug}', [PostsController::class, 'show'])->name('show-post');
 
 Route::get('/drag-drop', [SongsController::class, 'index'])->name('drag-drop');
+
+Route::get('/http-client', function (){
+
+    $responseMoviesPopular = Http::withToken(config('services.movie_token.token'))->get('https://api.themoviedb.org/3/movie/popular');
+    $responseMovieNowPlaying = Http::movies()->get('/3/movie/now_playing');
+//    $responseGithub = Http::get('http://api.github.com/users/drehimself/repos?sort=created&per_page=10');
+//    $responseWeather = Http::get('https://api.openweathermap.org/data/2.5/weather?q=Jeżowe&units=metric&appid='.config('services.weather_key.appID'));
+//    $responseWeather = Http::get('https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid='.config('services.weather_key.appID'));
+
+    $responses = Http::pool(fn (Pool $pool) => [
+        $pool->as('responseGithub')->get('http://api.github.com/users/drehimself/repos?sort=created&per_page=10'),
+        $pool->as('responseWeather')->get('https://api.openweathermap.org/data/2.5/weather?q=Jeżowe&units=metric&appid='.config('services.weather_key.appID')),
+
+    ]);
+
+    dump($responseMovieNowPlaying->json());
+    dump($responses['responseWeather']->json());
+    dump($responses['responseGithub']->json());
+
+
+
+    return view('http-client', [
+        'repos' => $responses['responseGithub']->json(),
+        'weather' => $responses['responseWeather']->json(),
+        'movies_popular' => $responseMoviesPopular->json(),
+        'movies_now_playing' =>$responseMovieNowPlaying->json(),
+    ]);
+});
 
 

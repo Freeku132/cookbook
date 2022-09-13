@@ -30,5 +30,11 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'weather_key' => [
+        'appID' => env('OPEN_WEATHER_MAP_KEY'),
+    ],
+    'movie_token' => [
+        'token' => env('MOVIE_DB_TOKEN'),
+    ],
 
 ];
